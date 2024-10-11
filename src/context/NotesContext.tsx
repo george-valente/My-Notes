@@ -8,6 +8,7 @@ export interface Note{
 export interface NotesContextType{
     notes: Note[]; 
     addNote: (newNote: Note) => void; 
+    deleteNote: (note: Note) => void;
     title: string; 
     setTitle: React.Dispatch<React.SetStateAction<string>>; 
     content: string;
@@ -30,9 +31,14 @@ export const NotesProvider = ({children}: NotesProviderProps) => {
         setTitle('')
         setContent('')
     }
+    const deleteNote = (noteToDelete: Note) => {
+        setNotes(notes.filter((note) => note.title !== noteToDelete.title ))
+        console.log(notes); 
+
+    }
 
     return(
-        <NotesContext.Provider value={{ notes, addNote, title, setTitle, content, setContent }}>
+        <NotesContext.Provider value={{ notes, addNote, deleteNote, title, setTitle, content, setContent }}>
             {children}
         </NotesContext.Provider>
     )

@@ -43,7 +43,7 @@ export function ShowNotes(){
               Create</button>
           </div>
 
-          <h2 className = "text-center">Library</h2>
+          <h2 className = "text-center text-sm font-bold">LIBRARY</h2>
             <div className="flex flex-wrap gap-4 justify-center">
               {notes.map((note, index) => (
                   <Note key = {index} title = {note.title} content = {note.content}/>
