@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'; 
-import { FormEvent, useState } from 'react';
+import { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useNotes, Note } from '../context/NotesContext'
+import { useNotes } from '../context/NotesContext'
 
 interface NewNote{
     title: string; 
@@ -26,7 +26,10 @@ export function Modal({closeNoteModal, onSaveNote} : ModalProps){
         if(title && content){
             const newNote: NewNote = {title, content}
             onSaveNote(newNote)
+            setTitle('');
+            setContent('');
             navigate('/notes'); 
+
         }
     }
 

@@ -1,22 +1,43 @@
-import { Ellipsis, Trash } from 'lucide-react';
+import { Ellipsis } from 'lucide-react';
 import { useNotes } from '../context/NotesContext'
 import { useState } from 'react';
+import { Modal } from './Modal';
 
 interface NoteProps{
     title: string; 
     content: string; 
 }
+
 export function Note({title, content} : NoteProps ){ 
-    const {deleteNote} = useNotes(); 
+    const {deleteNote, editNote} = useNotes(); 
     
     const [optionsModal, setOptionsModal] = useState(false);
+    const [noteModal, setNoteModalOpen] = useState(false);
 
+
+  const setModalOpen = () => {
+    setNoteModalOpen(true); 
+  }
+  
+  const closeNoteModal = () => {
+    setNoteModalOpen(false);
+  }
+
+  const handleSaveNote = (newNote: NoteProps) => {
     if(title && content){
-        console.log(title,content)
+      const noteToEdit: NoteProps = {title, content} 
+      editNote(noteToEdit, newNote); 
+
+      setNoteModalOpen(false)
     }
+    
+  }
+
+    /* if(title && content){
+        console.log(title,content)
+    } */
 
     const showOptions = () => {
-        console.log("Oii")
         setOptionsModal(!optionsModal)
 
     }
@@ -24,6 +45,7 @@ export function Note({title, content} : NoteProps ){
         const note: NoteProps ={title, content}
         deleteNote(note)
     }
+   
 
 
     return(
@@ -43,12 +65,15 @@ export function Note({title, content} : NoteProps ){
                             <button onClick = {handleDeleteNote}>Excluir</button>
                         </div>
                         <div className = "py-2 px-6 text-center text-black hover:bg-slate-200">
-                            <button>Editar</button>
+                            <button onClick = {setModalOpen}>Editar</button>
                         </div>
                     </div>
                 </div>
                 <p className = "">{content}</p>
             </div>
+
+            {noteModal &&
+       <Modal closeNoteModal={closeNoteModal} onSaveNote = {handleSaveNote}/>}
 
             
             
