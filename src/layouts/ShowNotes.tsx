@@ -30,8 +30,6 @@ export function ShowNotes(){
         
       }
 
-      
-    /* eu acho que esse layout é um map, das Notes existentes, exibe o componente Note com informações diferentes. */
     return(
         <div className = "bg-zinc-100 h-screen p-4 font-inter">
           <h1 className = "font-bold text-2xl text-start">My Notes</h1>

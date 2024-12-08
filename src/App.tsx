@@ -30,7 +30,7 @@ function App() {
     <div className="h-screen flex flex-col justify-center items-center font-inter bg-zinc-100">
       <div className = "mx-auto space-y-8 flex flex-col items-center justify-center">
         <h1 className = "font-bold text-2xl text-center">My Notes</h1>
-        <p className = "text-zinc-500 font-semibold text-center">Write - Or type - your thougths, rants, anything you have in your mind. Keep it clean. Keep it simple.</p>
+        <p className = "text-zinc-500 font-semibold text-center">Write - Or type - your thougths or anything you have in your mind. Keep it clean. Keep it simple.</p>
         <button 
         onClick = {setModalOpen}
         className = "flex gap-2 px-4 py-2 rounded-full bg-orange-400 text-white font-semibold hover: border border-orange-400 hover:bg-white hover:text-orange-400 transition-all duration-300 ease-in-out">
