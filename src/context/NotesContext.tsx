@@ -1,69 +1,93 @@
-    import { createContext, ReactNode, useContext, useState} from 'react'; 
+import { createContext, ReactNode, useContext, useState } from 'react';
+import { api } from '../services/api';
 
-    export interface Note{
-        title: string; 
-        content: string; 
-    }
+//Note Interface, contains its attributes.
+export interface Note {
+    id: number;
+    title: string;
+    content: string;
+}
 
-    export interface NotesContextType{
-        notes: Note[]; 
-        addNote: (newNote: Note) => void; 
-        deleteNote: (note: Note) => void;
-        editNote: (note: Note, newNote: Note) => void; 
-        title: string; 
-        setTitle: React.Dispatch<React.SetStateAction<string>>; 
-        content: string;
-        setContent: React.Dispatch<React.SetStateAction<string>>; 
-    } 
+//Context Interface - contain everything i need to export this context.
+export interface NotesContextType {
+    notes: Note[];
+    loading: boolean;
+    loadNotes: () => Promise<void>;
+    createNote: (newNote: Omit<Note, 'id'>) => Promise<void>;
+    deleteNote: (id: number) => Promise<void>;
+    editNote: (id: number, updatedNote: Partial<Note>) => Promise<void>;
+}
 
-    const NotesContext = createContext<NotesContextType | undefined>(undefined); 
+//creating the context.
+const NotesContext = createContext<NotesContextType | undefined>(undefined);
 
-    interface NotesProviderProps{
-        children: ReactNode; 
-    }
 
-    export const NotesProvider = ({children}: NotesProviderProps) => {
-        const [notes, setNotes ] = useState<Note[]>([]);
-        const [title, setTitle] = useState<string>('');
-        const [content, setContent] = useState<string>(''); 
+interface NotesProviderProps {
+    children: ReactNode;
+}
 
-        const addNote = (newNote: Note) => {
-            setNotes(prevNotes => [...prevNotes, newNote]); 
-            setTitle('')
-            setContent('')
+//Provider - componente que gerencia o estado das notas e define os métodos para acessa-la
+export const NotesProvider = ({ children }: NotesProviderProps) => {
+    const [notes, setNotes] = useState<Note[]>([]);
+    const [loading, setLoading] = useState(false);
+
+    // Load all Notes
+    const loadNotes = async () => {
+        try {
+            setLoading(true);
+            const response = await api.get('/notes');
+            setNotes(response.data);
+        } catch (error) {
+            console.error(`Erro ao carregar notas: ${error}`);
+        } finally {
+            setLoading(false);
         }
-        const deleteNote = (noteToDelete: Note) => {
-            setNotes(notes.filter((note) => note.title !== noteToDelete.title ))
-            console.log(notes); 
+    };
 
+    // Create Note
+    const createNote = async (newNote: Omit<Note, 'id'>) => {
+        try {
+            const response = await api.post('/notes', newNote);
+            setNotes((prevNotes) => [...prevNotes, response.data]);
+        } catch (error) {
+            console.error(`Erro ao criar nota: ${error}`);
         }
-        const editNote = (noteToEdit: Note, newNote: Note) => {
-            console.log(noteToEdit)
-            console.log(newNote)
-            const noteIndex = notes.findIndex(element => element.title === noteToEdit.title);
-            console.log(noteIndex);
+    };
 
-            if(noteIndex !== -1){
-                const newNotes = [...notes];
-                newNotes.splice(noteIndex,1,newNote);
-
-                setNotes(newNotes);
-                console.log(newNotes);
-            }
+    // Update note
+    const editNote = async (id: number, updatedNote: Partial<Note>) => {
+        try {
+            const response = await api.put(`/notes/${id}`, updatedNote);
+            setNotes((prevNotes) =>
+                prevNotes.map((note) => (note.id === id ? response.data : note))
+            );
+        } catch (error) {
+            console.error(`Erro ao atualizar nota: ${error}`);
         }
+    };
 
-        return(
-            <NotesContext.Provider value={{ notes, addNote, deleteNote, editNote, title, setTitle, content, setContent }}>
-                {children}
-            </NotesContext.Provider>
-        )
+    // Delete note
+    const deleteNote = async (id: number) => {
+        try {
+            await api.delete(`/notes/${id}`);
+            setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+        } catch (error) {
+            console.error(`Erro ao excluir nota: ${error}`);
+        }
+    };
 
+    return (
+        <NotesContext.Provider value={{ notes, loading, loadNotes, createNote, editNote, deleteNote }}>
+            {children}
+        </NotesContext.Provider>
+    );
+};
+
+
+export const useNotes = (): NotesContextType => {
+    const context = useContext(NotesContext);
+    if (!context) {
+        throw new Error('useNotes must be used within a NotesProvider');
     }
-
-    export const useNotes = (): NotesContextType => {
-        const context = useContext(NotesContext);
-        if(!context){
-            throw new Error('NotesContext must be used within a NotesProvider')
-        }
-        return context; 
-    }
+    return context;
+};
