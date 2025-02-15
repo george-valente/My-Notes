@@ -34,16 +34,16 @@ export function NoteModal({ id, title, content, closeFullNote }: NoteModalInterf
     }
 
     return (
-        <div className="fixed inset-0 bg-black/60 flex justify-center items-center">
+        <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50">
 
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.2 }}
-                className="bg-white rounded-md w-5/12">
+                className="bg-white rounded-md md:w-5/12">
                 <form onSubmit = {handleSubmit}>
-                    <div className="flex justify-between items-center mb-4 border border-gray-300 py-2 px-4">
+                    <div className="flex justify-between items-center mb-4 border border-gray-300 py-2 px-4 rounded-md">
                         <input
                             type="text"
                             className="text-blue-500 font-bold antialiased text-lg outline-none"
@@ -56,16 +56,16 @@ export function NoteModal({ id, title, content, closeFullNote }: NoteModalInterf
                     </div>
                     
                     <div className="p-4">
-                        <input
-                            type="text"
-                            className="text-black antialised w-full"
+                        <textarea
+                            rows={6}
+                            className="text-black antialised w-full resize-none outline-none"
                             value={editedContent}
                             onChange={(e) => setEditedContent(e.target.value)} />
                         {/* <p className="text-black antialiased">
                         {content}
                     </p> */}
                     </div>
-                    <div className=" flex justify-end mt-4">
+                    <div className=" flex justify-end mt-4 p-4">
                         <button
                             className="flex gap-2 px-4 py-2 rounded-full bg-blue-500 text-white font-semibold  hover:brightness-90">
                             Salvar alterações

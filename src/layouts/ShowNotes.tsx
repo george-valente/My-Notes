@@ -23,7 +23,7 @@ export function ShowNotes(){
     },[]) 
 
     return(
-        <div className = "bg-white h-screen font-inter">
+        <div className = "bg-white h-screen font-inter mb-12">
           <header className = "border border-gray-300 py-2 px-8">
             <h1 className = "font-bold text-2xl text-start text-blue-600">My Notes</h1>
           </header>
@@ -31,8 +31,8 @@ export function ShowNotes(){
           <div className="flex justify-end mt-4 mr-6">
             <button
               onClick = {setModalOpen}
-              className = "flex gap-2 px-4 py-2 rounded-full bg-blue-400 text-white font-semibold hover: border border-blue-400 hover:bg-white hover:text-blue-400 transition-all duration-300 ease-in-out">
-              <PenLine/>
+              className = "flex gap-2 items-center px-4 py-2 rounded-full bg-blue-400 text-white font-semibold hover: border border-blue-400 hover:bg-white hover:text-blue-400 transition-all duration-300 ease-in-out">
+              <PenLine size={20}/>
               Create</button>
           </div>
 

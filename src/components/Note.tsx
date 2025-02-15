@@ -13,7 +13,7 @@ interface NoteProps {
 }
 
 export function Note({ id, title, content }: NoteProps) {
-  const { deleteNote, editNote } = useNotes();
+  const { deleteNote } = useNotes();
 
   const [optionsModal, setOptionsModal] = useState(false);
   const [noteModal, setNoteModalOpen] = useState(false);
@@ -30,6 +30,7 @@ export function Note({ id, title, content }: NoteProps) {
   const openFullNote = () => {
     console.log("abridno")
     setFullNoteModal(true);
+    setOptionsModal(false)
   }
 
   const closeFullNote = () => {
@@ -53,7 +54,7 @@ export function Note({ id, title, content }: NoteProps) {
       <h1 className="text-xl p-2 outline-none text-gray-950 font-semibold">
         {title}
       </h1>
-      <div className="bg-gray-100 flex p-5 flex-col w-64 rounded-lg min-h-40 ml-4 overflow-hidden border border-slate-300">
+      <div className="bg-gray-100 flex p-4 flex-col w-64 rounded-lg h-48 ml-4 overflow-hidden border border-slate-300">
         <div className="flex justify-end text-slate-500 relative" >
           <Ellipsis
             onClick={showOptions}
