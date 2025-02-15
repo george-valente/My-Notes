@@ -86,7 +86,7 @@ export function Note({ id, title, content }: NoteProps) {
         <Modal closeNoteModal={closeNoteModal} />}
 
       {fullNoteModal
-        && <NoteModal title={title} content={content} closeFullNote={closeFullNote} />}
+        && <NoteModal id = {id} title={title} content={content} closeFullNote={closeFullNote} />}
 
     </div>
   )

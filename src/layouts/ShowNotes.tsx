@@ -17,7 +17,7 @@ export function ShowNotes(){
         setNoteModalOpen(false);
       }
 
-    //1 - consertar esse useEffect.   
+       
     useEffect(() => {
       loadNotes(); 
     },[]) 

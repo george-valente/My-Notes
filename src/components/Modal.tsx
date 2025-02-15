@@ -3,11 +3,11 @@ import { FormEvent, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useNotes } from '../context/NotesContext'
 
-/* interface NewNote{
+interface NewNote{
     title: string; 
     content: string; 
 }
- */
+
 
 interface ModalProps {
     closeNoteModal: () => void
@@ -24,7 +24,7 @@ export function Modal({ closeNoteModal }: ModalProps) {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        const newNote = {
+        const newNote: NewNote = {
             title: title,
             content: content
         }
