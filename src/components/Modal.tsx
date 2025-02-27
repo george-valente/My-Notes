@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { FormEvent, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useNotes } from '../context/NotesContext'
+import { Hash } from 'lucide-react';
 
 interface NewNote{
     title: string; 
@@ -16,6 +17,7 @@ interface ModalProps {
 export function Modal({ closeNoteModal }: ModalProps) {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [tagsModal, setTagsModal] = useState(false); 
 
     const { createNote } = useNotes();
 
@@ -24,6 +26,10 @@ export function Modal({ closeNoteModal }: ModalProps) {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
+        if(!title && !content){
+            return; 
+        }
+
         const newNote: NewNote = {
             title: title,
             content: content
@@ -36,6 +42,17 @@ export function Modal({ closeNoteModal }: ModalProps) {
             navigate("/notes")
         }
     }
+
+    /* open tags modal */
+    const openTagsModal = () => {
+        console.log("abrindo o tags modal"); 
+        setTagsModal(!tagsModal); 
+    }
+
+    /* const closeTagsModal = () => {
+        console.log("fechando o tags modal"); 
+        setTagsModal(false); 
+    } */
 
 
     return (
@@ -61,22 +78,39 @@ export function Modal({ closeNoteModal }: ModalProps) {
                         rows={7}
                         placeholder="Try on! Write anything you want."
                         className="p-2 outline-none placeholder-zinc-600 resize-none"></textarea>
+
+                    <div className = "pb-2 relative">
+                        <button 
+                        onClick = {openTagsModal}
+                        className = "p-2 bg-zinc-300 rounded-full">
+                            <Hash className = "text-blue-600 hover:animate-pulse" size = {20}/>
+                        </button>
+                    </div>
+                    {tagsModal && 
+                        <div className = " bg-slate-50 absolute bottom-[6.5rem] border  antialiased font-semibold shadow-shadow-28 z-50 "> 
+                        <ul className = "text-sm">
+                            <li className ="py-2 pl-2 pr-16 hover:bg-zinc-300 cursor-pointer">Pessoal </li>
+                            <li className ="py-2 pl-2 pr-16 hover:bg-zinc-300 cursor-pointer">Trabalho</li>
+                            <li className ="py-2 pl-2 pr-16 hover:bg-zinc-300 cursor-pointer">Afazeres</li>
+                            <li className ="py-2 pl-2 pr-16 hover:bg-zinc-300 cursor-pointer">Compras</li>
+                        </ul>
+                            
+                        </div>
+                    }
+
                     <div className="flex justify-between">
                         <button
                             onClick={closeNoteModal}
                             className="p-2 bg-zinc-300 rounded-full">Fechar</button>
                         {content && title ?
                             <button
-
                                 className="flex gap-2 px-4 py-2 rounded-full bg-blue-400 text-white font-semibold  hover:brightness-90">
                                 Salvar
                             </button> : (
                                 <button
                                     type="submit"
-
                                     disabled={!content || !title}
                                     className="flex gap-2 px-4 py-2 rounded-full bg-blue-400 text-white font-semibold brightness-75">
-
                                     Salvar
                                 </button>
                             )
