@@ -39,7 +39,7 @@ export function ShowNotes(){
           <h2 className = "text-center text-sm font-bold mb-5">LIBRARY</h2>
             <div className="flex flex-wrap gap-4 justify-center">
                 {notes.map((note) => (
-                    <Note key = {note.id} id = {note.id} title = {note.title} content = {note.content}/>
+                    <Note key = {note.id} id = {note.id} title = {note.title} content = {note.content} tags = {note.tags}/>
                 ))}
             </div>
             

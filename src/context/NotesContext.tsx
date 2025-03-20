@@ -6,6 +6,7 @@ export interface Note {
     id: number;
     title: string;
     content: string;
+    tags: Array<string>
 }
 
 //Context Interface - contain everything i need to export this context.
@@ -39,7 +40,7 @@ export const NotesProvider = ({ children }: NotesProviderProps) => {
             setNotes(response.data);
         } catch (error) {
             console.error(`Erro ao carregar notas: ${error}`);
-        } finally {
+        } finally { 
             setLoading(false);
         }
     };

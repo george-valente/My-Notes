@@ -1,4 +1,4 @@
-import { Ellipsis } from 'lucide-react';
+import { Ellipsis, X } from 'lucide-react';
 import { useNotes } from '../context/NotesContext'
 import { useState } from 'react';
 import { Modal } from './Modal';
@@ -10,9 +10,10 @@ interface NoteProps {
   id: number;
   title: string;
   content: string;
+  tags: Array<string>;
 }
 
-export function Note({ id, title, content }: NoteProps) {
+export function Note({ id, title, content, tags }: NoteProps) {
   const { deleteNote } = useNotes();
 
   const [optionsModal, setOptionsModal] = useState(false);
@@ -54,40 +55,52 @@ export function Note({ id, title, content }: NoteProps) {
       <h1 className="text-xl p-2 outline-none text-gray-950 font-semibold">
         {title}
       </h1>
-      <div className="bg-gray-100 flex p-4 flex-col w-64 rounded-lg h-48 ml-4 overflow-hidden border border-slate-300">
-        <div className="flex justify-end text-slate-500 relative" >
-          <Ellipsis
-            onClick={showOptions}
-            className="cursor-pointer hover:bg-slate-200 rounded-full select-none" />
-
-          <AnimatePresence>
-            {optionsModal && (
-              <motion.div
-                initial={{ opacity: 0, scale: 1 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1 }}
-                transition={{ duration: 0.1 }}
-
-                className="bg-white absolute shadow-shadow-28 top-8">
-                <div className="py-2 px-6 text-center text-red-600 font-bold hover:bg-slate-200">
-                  <button onClick={handleDeleteNote}>Excluir</button>
-                </div>
-                <div className="py-2 px-6 text-center text-black hover:bg-slate-200">
-                  <button onClick={setModalOpen}>Editar</button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
+      <div className="bg-gray-100 flex p-4 flex-col justify-between w-64 rounded-lg h-48 ml-4 overflow-hidden border border-slate-300">
+        <div>
+          <div className="flex justify-end text-slate-500 relative" >
+            <Ellipsis
+              onClick={showOptions}
+              className="cursor-pointer hover:bg-slate-200 rounded-full select-none" />
+            <AnimatePresence>
+              {optionsModal && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1 }}
+                  transition={{ duration: 0.1 }}
+                  className="bg-white absolute shadow-shadow-28 top-8">
+                  <div className="py-2 px-6 text-center text-red-600 font-bold hover:bg-slate-200">
+                    <button onClick={handleDeleteNote}>Excluir</button>
+                  </div>
+                  <div className="py-2 px-6 text-center text-black hover:bg-slate-200">
+                    <button onClick={setModalOpen}>Editar</button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          <p className="cursor-pointer" onClick={openFullNote}>{content}</p>
         </div>
-        <p className="cursor-pointer" onClick={openFullNote}>{content}</p>
+
+        <ul className="flex gap-2">
+          {tags && tags.map((tag, index) => (
+            <li className="flex items-center gap-2 bg-zinc-300 p-2 rounded-full" key={index}>#{tag}
+              <X className="text-slate-700 cursor-pointer hover:text-black" size={16} />
+            </li>
+
+
+
+          ))}
+        </ul>
+
+
       </div>
 
       {noteModal &&
         <Modal closeNoteModal={closeNoteModal} />}
 
       {fullNoteModal
-        && <NoteModal id = {id} title={title} content={content} closeFullNote={closeFullNote} />}
+        && <NoteModal id={id} title={title} content={content} closeFullNote={closeFullNote} />}
 
     </div>
   )
