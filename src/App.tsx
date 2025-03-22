@@ -2,6 +2,9 @@ import { PenLine } from "lucide-react"
 import { Modal } from "./components/Modal";
 import { useState } from "react";
 //import { useNotes } from '../src/context/NotesContext'
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   const [noteModal, setNoteModalOpen] = useState(false);
@@ -31,6 +34,7 @@ function App() {
       {noteModal &&
         <Modal closeNoteModal={closeNoteModal} />}
 
+        
     </div>
   )
 }

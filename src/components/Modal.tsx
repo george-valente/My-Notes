@@ -4,9 +4,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useNotes } from '../context/NotesContext'
 import { Hash, X } from 'lucide-react';
 import { api } from '../services/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-interface Tag{
-    name: string; 
+interface Tag {
+    name: string;
 }
 
 interface NewNote {
@@ -25,7 +27,7 @@ export function Modal({ closeNoteModal }: ModalProps) {
     const [tagsModal, setTagsModal] = useState(false);
 
     const [tags, setTags] = useState<Array<Tag>>([]);
-    const [selectedTags, setSelectedTags] = useState<string[]>([]); 
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     const { createNote } = useNotes();
 
@@ -44,21 +46,21 @@ export function Modal({ closeNoteModal }: ModalProps) {
             }
         }
 
-        getTags(); 
+        getTags();
     }, [])
 
     const selectTagTest = (tag: Tag) => {
-        if(selectedTags.includes(tag.name)){
-            return; 
+        if (selectedTags.includes(tag.name)) {
+            return;
         }
-        const newSelectedTag = tag.name; 
-        setSelectedTags([...selectedTags, newSelectedTag]);  
+        const newSelectedTag = tag.name;
+        setSelectedTags([...selectedTags, newSelectedTag]);
     }
 
     const removeTag = (tag: string) => {
-        const selectedTag = tag; 
+        const selectedTag = tag;
 
-        setSelectedTags(selectedTags.filter(tag => tag != selectedTag));  
+        setSelectedTags(selectedTags.filter(tag => tag != selectedTag));
     }
 
     const handleSubmit = (e: FormEvent) => {
@@ -75,12 +77,26 @@ export function Modal({ closeNoteModal }: ModalProps) {
         }
         console.log(newNote)
         createNote(newNote);
+
+        toast.success('Note saved successfully', {
+            position: 'bottom-right',
+            autoClose: 3000, 
+            hideProgressBar: false, 
+            closeOnClick: true, 
+            pauseOnHover: true, 
+            draggable: true
+        })
+        
         closeNoteModal();
+        
 
         if (location.pathname !== "/notes") {
             navigate("/notes")
         }
+        
     }
+
+    
 
     /* open tags modal */
     const openTagsModal = () => {
@@ -121,30 +137,34 @@ export function Modal({ closeNoteModal }: ModalProps) {
                             <Hash className="text-blue-600 hover:animate-pulse" size={20} />
                         </button>
                         <ul className="flex gap-2 overflow-x-scroll">
-                        {/* Exibiçaõ das tags escolhidas*/}
-                        {selectedTags && selectedTags.map((tag, index) => (
-                                <li 
-                                className="flex items-center gap-2 bg-zinc-300 p-2 rounded-full " 
-                                key={index}>#{tag}
-                                    <X 
-                                    onClick = {() => removeTag(tag)}
-                                    className="text-slate-700 cursor-pointer hover:text-black" size={16} />
-                                </li>
-                        ))}
+                            {/* Exibiçaõ das tags escolhidas*/}
+                            {selectedTags && selectedTags.map((tag, index) => (
+                                <motion.li
+                                    initial = {{opacity: 0, x: -20}}
+                                    animate = {{opacity: 1 , x: 0}}
+                                    exit = {{opacity: 0, x: 20}}
+                                    transition={{duration: 0.3}}
+                                    className="flex items-center gap-2 bg-zinc-300 p-2 rounded-full "
+                                    key={index}>#{tag}
+                                    <X
+                                        onClick={() => removeTag(tag)}
+                                        className="text-slate-700 cursor-pointer hover:text-black" size={16} />
+                                </motion.li>
+                            ))}
                         </ul>
 
                     </div>
                     <div className="border-t border-gray-300 my-2 "></div>
                     {/* Seleção de tags */}
-                    {(tagsModal && tags) &&  (
+                    {(tagsModal && tags) && (
                         <div className="bg-slate-50 absolute bottom-[8.5rem] border antialiased font-semibold shadow-shadow-28 z-50 ">
-                            <ul className = " h-40 overflow-y-scroll">
+                            <ul className=" h-40 overflow-y-scroll">
                                 {tags.map((tag, index) => (
-                                    <li 
-                                    onClick = {() => selectTagTest(tag)}
-                                    key={index} 
-                                    className="py-2 pl-2 pr-16 hover:bg-zinc-300 cursor-pointer text-sm ">
-                                        {tag.name} 
+                                    <li
+                                        onClick={() => selectTagTest(tag)}
+                                        key={index}
+                                        className="py-2 pl-2 pr-16 hover:bg-zinc-300 cursor-pointer text-sm ">
+                                        {tag.name}
                                     </li>
                                 ))}
                             </ul>
@@ -174,6 +194,7 @@ export function Modal({ closeNoteModal }: ModalProps) {
                 </form>
 
             </motion.div>
+            
         </div>
 
     )

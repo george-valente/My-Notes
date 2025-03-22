@@ -29,13 +29,11 @@ export function Note({ id, title, content, tags }: NoteProps) {
   }
 
   const openFullNote = () => {
-    console.log("abridno")
     setFullNoteModal(true);
     setOptionsModal(false)
   }
 
   const closeFullNote = () => {
-    console.log("fechando")
     setFullNoteModal(false)
   }
 
@@ -55,7 +53,7 @@ export function Note({ id, title, content, tags }: NoteProps) {
       <h1 className="text-xl p-2 outline-none text-gray-950 font-semibold">
         {title}
       </h1>
-      <div className="bg-gray-100 flex p-4 flex-col justify-between w-64 rounded-lg h-48 ml-4 overflow-hidden border border-slate-300">
+      <div className="bg-gray-100 flex p-4 flex-col justify-between w-64 rounded-lg h-48 ml-4 overflow-hidden border border-slate-300 cursor-pointer">
         <div>
           <div className="flex justify-end text-slate-500 relative" >
             <Ellipsis
@@ -100,7 +98,7 @@ export function Note({ id, title, content, tags }: NoteProps) {
         <Modal closeNoteModal={closeNoteModal} />}
 
       {fullNoteModal
-        && <NoteModal id={id} title={title} content={content} closeFullNote={closeFullNote} />}
+        && <NoteModal id={id} title={title} content={content} tags={tags} closeFullNote={closeFullNote} />}
 
     </div>
   )

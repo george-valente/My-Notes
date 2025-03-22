@@ -40,7 +40,7 @@ export const NotesProvider = ({ children }: NotesProviderProps) => {
             setNotes(response.data);
         } catch (error) {
             console.error(`Erro ao carregar notas: ${error}`);
-        } finally { 
+        } finally {
             setLoading(false);
         }
     };

@@ -42,6 +42,8 @@ export function ShowNotes(){
                     <Note key = {note.id} id = {note.id} title = {note.title} content = {note.content} tags = {note.tags}/>
                 ))}
             </div>
+
+            <div className="pb-12"></div>
             
 
             {noteModal &&
