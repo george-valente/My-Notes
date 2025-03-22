@@ -48,17 +48,22 @@ export function Modal({ closeNoteModal }: ModalProps) {
     }, [])
 
     const selectTagTest = (tag: Tag) => {
-        console.log(tag.name)
+        if(selectedTags.includes(tag.name)){
+            return; 
+        }
         const newSelectedTag = tag.name; 
+        setSelectedTags([...selectedTags, newSelectedTag]);  
+    }
 
-        setSelectedTags([...selectedTags, newSelectedTag]); 
+    const removeTag = (tag: string) => {
+        const selectedTag = tag; 
 
-        console.log(selectedTags)
-         
+        setSelectedTags(selectedTags.filter(tag => tag != selectedTag));  
     }
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
+
         if (!title && !content) {
             return;
         }
@@ -82,11 +87,6 @@ export function Modal({ closeNoteModal }: ModalProps) {
         console.log("abrindo o tags modal");
         setTagsModal(!tagsModal);
     }
-
-    /* const closeTagsModal = () => {
-        console.log("fechando o tags modal"); 
-        setTagsModal(false); 
-    } */
 
 
     return (
@@ -124,10 +124,11 @@ export function Modal({ closeNoteModal }: ModalProps) {
                         {/* Exibiçaõ das tags escolhidas*/}
                         {selectedTags && selectedTags.map((tag, index) => (
                                 <li 
-                                
                                 className="flex items-center gap-2 bg-zinc-300 p-2 rounded-full " 
                                 key={index}>#{tag}
-                                    <X className="text-slate-700 cursor-pointer hover:text-black" size={16} />
+                                    <X 
+                                    onClick = {() => removeTag(tag)}
+                                    className="text-slate-700 cursor-pointer hover:text-black" size={16} />
                                 </li>
                         ))}
                         </ul>
@@ -168,8 +169,6 @@ export function Modal({ closeNoteModal }: ModalProps) {
                                 </button>
                             )
                         }
-
-                        
 
                     </div>
                 </form>
